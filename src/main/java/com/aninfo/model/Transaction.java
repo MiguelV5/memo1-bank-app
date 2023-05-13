@@ -10,34 +10,50 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long transactionID;
-    
-    private Long cbu;
+    private Long id;
+
+    private Double amount;
     private String type;
-    private Double sum;
+    private Long cbu;
 
-    public Transaction(Long ID, Long cbu, String type, Double amount) {
-        this.transactionID = ID;
-        this.cbu = cbu;
+    public Transaction(){
+    }
+
+    public Transaction(Double amount,String type, Long cbu){
+        this.amount = amount;
         this.type = type;
-        this.sum = amount;
+        this.cbu = cbu;
     }
 
-    public Long getID(){
-        return transactionID;
+    public Long getId(){
+        return id;
     }
 
-    public Long getCbu() {
-        return cbu;
+    public void setId(Long id){
+        this.id = id;
     }
 
-    public Double getSum() {
-        return sum;
+    public Double getAmount(){
+        return amount;
     }
 
-    public String getType() {
+    public void setAmount(Double amount){
+        this.amount = amount;
+    }
+
+    public String getType(){
         return type;
     }
 
+    public void setType(String type){
+        this.type = type;
+    }
 
+    public Long getCbu(){
+        return cbu;
+    }
+
+    public void setCbu(Long cbu){
+        this.cbu = cbu;
+    }
 }
