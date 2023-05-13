@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.Max;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -56,6 +57,16 @@ public class AccountService {
 
         if (sum <= 0) {
             throw new DepositNegativeSumException("Cannot deposit negative sums");
+        }
+
+        final double MinForPromo = 2000.0;
+        final double MaxForPromo = 5000.0;
+        final double MaxBonus = 500.0;
+
+        if(sum >= MinForPromo && sum <= MaxForPromo){
+            sum += sum*0.1;
+        }else if(sum > MaxForPromo){
+            sum += MaxBonus;
         }
 
         Account account = accountRepository.findAccountByCbu(cbu);

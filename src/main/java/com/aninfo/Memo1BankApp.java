@@ -2,6 +2,8 @@ package com.aninfo;
 
 import com.aninfo.model.Account;
 import com.aninfo.service.AccountService;
+import com.aninfo.model.Transaction;
+import com.aninfo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,6 +28,9 @@ public class Memo1BankApp {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private TransactionService transactionService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Memo1BankApp.class, args);
@@ -65,6 +70,39 @@ public class Memo1BankApp {
 		accountService.deleteById(cbu);
 	}
 
+	// ====================================================================================== //
+
+	// Added endpoints:
+
+	@PostMapping("/transactions")
+	public Transaction createTransaction(@RequestParam Long cbu, @RequestParam String type, @RequestParam Double amount){
+		return transactionService.createTransaction(amount, type, cbu);
+	}
+
+	@GetMapping("/transactions")
+	public Collection<Transaction> getTransactions() {
+		return transactionService.getTransactions();
+	}
+
+	@GetMapping("/transactions/{id}")
+	public ResponseEntity<Transaction> getTransaction(@PathVariable Long id) {
+		Optional<Transaction> transactionOptional = transactionService.findById(id);
+		return ResponseEntity.of(transactionOptional);
+	}
+
+	@DeleteMapping("/transactions/{id}")
+	public void deleteTransaction(@PathVariable Long id) {
+		transactionService.deleteById(id);
+	}
+
+	@GetMapping("/accounts/{cbu}/transactions")
+	public Collection<Transaction> getTransactions(@PathVariable Long cbu){
+		return transactionService.getTransactionsByCbu(cbu);
+	}
+
+
+	// Old transactions' direct methods (These do not meet REST's restrictions for verbs):
+	/*
 	@PutMapping("/accounts/{cbu}/withdraw")
 	public Account withdraw(@PathVariable Long cbu, @RequestParam Double sum) {
 		return accountService.withdraw(cbu, sum);
@@ -74,6 +112,7 @@ public class Memo1BankApp {
 	public Account deposit(@PathVariable Long cbu, @RequestParam Double sum) {
 		return accountService.deposit(cbu, sum);
 	}
+	*/
 
 	@Bean
 	public Docket apiDocket() {
